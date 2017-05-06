@@ -10,7 +10,7 @@ public class Automobile implements java.io.Serializable {
 
     //Instance Variables
     private String name;
-    private float basePrice = 0;
+    private Float basePrice = 0f;
     private float finalPrice = 0;
     private OptionSet[] opset;
     private boolean hasBeenSerialized;
@@ -20,8 +20,9 @@ public class Automobile implements java.io.Serializable {
     private ArrayList optNameList;
     private ArrayList<Option> choice;
 
+
     /*+++++++++++++++++++++Constructors+++++++++++++++++++++*/
-    public Automobile(String newName, String modelName, float newBasePrice, int numOfOptionSets)
+    public Automobile(String newName, String modelName, Float newBasePrice, int numOfOptionSets)
     {
         name = newName;
         make = newName;
@@ -43,7 +44,7 @@ public class Automobile implements java.io.Serializable {
     public String getName() {
         return name;
     }
-    public float getBasePrice() {
+    public Float getBasePrice() {
         return basePrice;
     }
     public float getFinalPrice() {
@@ -51,6 +52,9 @@ public class Automobile implements java.io.Serializable {
     }
     public OptionSet[] getOpset() {
         return opset;
+    }
+    public OptionSet getOpset(int index){
+        return opset[index];
     }
     public boolean hasBeenSerialized(){
         return hasBeenSerialized;
@@ -67,16 +71,18 @@ public class Automobile implements java.io.Serializable {
     public String getMake() {
         return make;
     }
-
     //Getters for OptionSet
     public String getOptionSetName(int optSetNum){
         return opset[optSetNum].getName();
     }
-
+    public int getNumOptions(int optSetNum){
+        return opset[optSetNum].getNumOptions();
+    }
     //Getters for Option
     public String getOptionName(int optNum, int optSetNum) {
         return opset[optSetNum].getOptionName(optNum);
     }
+
     public Float getOptionCost(int optNum, int optSetNum) {
         return opset[optSetNum].getOptionCost(optNum);
     }
@@ -138,10 +144,12 @@ public class Automobile implements java.io.Serializable {
         return -1;//If not found
     }
     //Rudimentary Finder for Option, Right now it's quadratic
-    public int findOptionNum(String s){
-        for (int i = 0; i < opset.length; i++){
-            if(opset[i].findOptionNum(s) != -1)
-                return opset[i].findOptionNum(s);
+    public int findOptionNum(String s, int optSetNum){
+        int numOfOptions = opset[optSetNum].getOpt().length;
+        for(int i = 0; i < numOfOptions; i++){
+            String name = opset[optSetNum].getOptionName(i);
+            if(name.equals(s))
+                return i;
         }
         return -1;//If not found
     }
@@ -150,20 +158,36 @@ public class Automobile implements java.io.Serializable {
         /*       I want these to ADD functionality        */
         /*       NOT reiterate Setter functionality       */
     //Updaters for OptionSet
-    public void updateOptionSetName(String name, String newName){
-        opset[findOptionSetNum(name)].setName(newName);
-    }
+   public synchronized void updateOptionSetName(String name, String newName, boolean editStatus) {
+       if(editStatus){
+           opset[findOptionSetNum(name)].setName(newName);
+           notifyAll();
+       }
+       else
+           try{
+               wait();
+           }catch(InterruptedException iex) {
+               // display any interruptions but continue
+               System.err.println(iex);
+           }
+   }
 
     //Updaters for Option
-    public void updateOptionName(String optSetName, String optName, String newName) {
-        int optNum = findOptionNum(optName);
+    public synchronized void updateOptionName(String optSetName, String optName, String newName) {
         int optSetNum = findOptionSetNum(optSetName);
+        int optNum = findOptionNum(optName, optSetNum);
         opset[optSetNum].setOptionName(newName, optNum);
     }
-    public void updateOptionCost(String optSetName, String optName, Float newCost) {
-        int optNum = findOptionNum(optName);
+    public synchronized void updateOptionCost(String optSetName, String optName, Float newCost) {
         int optSetNum = findOptionSetNum(optSetName);
-        opset[optSetNum].setOptionCost(newCost, optNum);
+        if (optSetNum == -1)
+            System.out.println("You have provided an Option Set Name that does not exist");
+
+        int optNum = findOptionNum(optName, optSetNum);
+        if (optNum == -1)
+            System.out.println("You have provided an Option Name that does not exist");
+        else
+            opset[optSetNum].setOptionCost(newCost, optNum);
     }
 
     /*+++++++++++++++++++++Deleters+++++++++++++++++++++*/
@@ -181,7 +205,7 @@ public class Automobile implements java.io.Serializable {
     //Deleters for Option
     public void deleteOption(String opSetName, String optToDelete){
         int optSetNum = findOptionSetNum(opSetName);
-        int optNum = findOptionNum(optToDelete);
+        int optNum = findOptionNum(optToDelete, optSetNum);
         opset[optSetNum].deleteOption(optNum);
     }
 
@@ -248,4 +272,10 @@ public class Automobile implements java.io.Serializable {
             System.out.println("----------------------------------------------------");
         }
     }
+
+    public void printOptionSetNames() {
+        for(int i = 0; i < opset.length; i++)
+            System.out.println(opset[i].getName());
+    }
+
 }

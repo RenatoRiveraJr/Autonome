@@ -9,6 +9,7 @@ public class OptionSet implements java.io.Serializable{
     //Instance Variables
     private Option[] opt;
     private String name;
+    private int numOptions;
 
     /*+++++++++++++++++++++Constructors+++++++++++++++++++++*/
     protected OptionSet(){ }
@@ -17,6 +18,7 @@ public class OptionSet implements java.io.Serializable{
         this.name = name;
     }
     protected OptionSet(int numOptions){
+        this.numOptions = numOptions;
         opt = new Option[numOptions];
         for(int i = 0;i < numOptions; i++){
             opt[i] = new Option();
@@ -30,6 +32,9 @@ public class OptionSet implements java.io.Serializable{
     }
     protected Option[] getOpt() {
         return opt;
+    }
+    protected int getNumOptions(){
+        return numOptions;
     }
     //Getters for Option
     protected String getOptionName(int optNum){
@@ -52,6 +57,7 @@ public class OptionSet implements java.io.Serializable{
         opt[optNum].setName(name);
     }
     protected void setOptionCost(Float cost, int optNum){
+        //System.out.println(optNum);
         opt[optNum].setCost(cost);
     }
 

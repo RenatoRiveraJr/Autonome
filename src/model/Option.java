@@ -8,10 +8,10 @@ public class Option implements java.io.Serializable{
 
     //Private Instance Variables
     private String name;
-    private float cost;
+    private Float cost;
     //Constructor
     public Option(){ }
-    public Option(String name, float cost){
+    public Option(String name, Float cost){
         this.name = name;
         this.cost = cost;
     }
@@ -19,15 +19,14 @@ public class Option implements java.io.Serializable{
     public String getName() {
             return name;
         }
-    public float getCost() {
+    public Float getCost() {
             return cost;
         }
     //Setters
     public void setName(String name) {
             this.name = name;
         }
-    public void setCost(float cost) {
+    public void setCost(Float cost) {
             this.cost = cost;
         }
 }
-

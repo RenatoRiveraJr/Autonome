@@ -7,6 +7,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 import java.util.StringTokenizer;
 /**
  * Created by RJ Rivera on 1/15/2017.
@@ -131,7 +132,7 @@ public class FileIO {
         }
     }
 
-    //Deserialze Object
+    //Deserialize Object
     public Object deserialize(String fileName){
         try{
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
@@ -163,7 +164,6 @@ public class FileIO {
             e.printStackTrace();
         }
     }
-
 
 }
 /*
