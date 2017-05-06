@@ -1,0 +1,5 @@
+Color,Fort Knox Gold Clearcoat,5
+Transmission,Manual,-815
+Brakes/Traction Control,ABS Advanced Traction,1625
+Side Impact Air Bags,Present,350
+Power Moonroof,Present,595
