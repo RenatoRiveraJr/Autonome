@@ -1,6 +1,6 @@
-Acura,Integra,50000,5
-5,Color,Milano Red,0,Midnight Black,0,Hyper Yellow,0,Forest Green,0,Gunmetal Grey,0
-2,Transmission,Automatic,0,Manual,-815
-2,Brakes/Traction Control,Standard,0,ABS,600
+Ferrari,458 Italia,500000,5
+5,Color,Gold,0,Black,0,White,0,Ferrari Red,0,Yellow,0
+2,Transmission,Automatic,0,Paddle Shift,30000
+2,Brakes/Traction Control,Racing,4000,ABS,600
 2,Forward Impact Air Bags,Present,795,Not Present,0
 2,Power Moonroof,Present,595,Not Present,0
