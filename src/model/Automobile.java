@@ -1,7 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
- * Created by darthrahj on 1/14/17.
+ * Created by sdarthrahj on 1/14/17.
  */
 
 public class Automobile implements java.io.Serializable {
@@ -12,13 +14,22 @@ public class Automobile implements java.io.Serializable {
     private float finalPrice = 0;
     private OptionSet[] opset;
     private boolean hasBeenSerialized;
+    //Instance Variables Added for Lab 3
+    private String make;
+    private String model;
+    private ArrayList optNameList;
+    private ArrayList<Option> choice;
 
     /*+++++++++++++++++++++Constructors+++++++++++++++++++++*/
-    public Automobile(String newName, float newBasePrice, int numOfOptionSets)
+    public Automobile(String newName, String modelName, float newBasePrice, int numOfOptionSets)
     {
         name = newName;
+        make = newName;
+        model = modelName;
         basePrice = newBasePrice;
         opset = new OptionSet[numOfOptionSets];
+        optNameList = new ArrayList(numOfOptionSets);
+        choice = new ArrayList(numOfOptionSets);
     }
     public Automobile(String newName)
     {
@@ -43,6 +54,18 @@ public class Automobile implements java.io.Serializable {
     }
     public boolean hasBeenSerialized(){
         return hasBeenSerialized;
+    }
+    public ArrayList getOptNameList1() {
+        return choice;
+    }
+    public ArrayList getOptNameList() {
+        return optNameList;
+    }
+    public String getModel() {
+        return model;
+    }
+    public String getMake() {
+        return make;
     }
 
     //Getters for OptionSet
@@ -74,6 +97,18 @@ public class Automobile implements java.io.Serializable {
     }
     public void setHasBeenSerialized(boolean x) {
         this.hasBeenSerialized = x;
+    }
+    /*public void setChosenOptList(ArrayList<Option> chosenOptList) {
+        this.chosenOptList = chosenOptList;
+    }*/
+    public void setOptNameList(ArrayList optNameList) {
+        this.optNameList = optNameList;
+    }
+    public void setMake(String make) {
+        this.make = make;
+    }
+    public void setModel(String model) {
+        this.model = model;
     }
 
     //Setters for OptionSet
@@ -121,12 +156,12 @@ public class Automobile implements java.io.Serializable {
 
     //Updaters for Option
     public void updateOptionName(String optSetName, String optName, String newName) {
-        int optNum = findOptionNum(name);
+        int optNum = findOptionNum(optName);
         int optSetNum = findOptionSetNum(optSetName);
         opset[optSetNum].setOptionName(newName, optNum);
     }
     public void updateOptionCost(String optSetName, String optName, Float newCost) {
-        int optNum = findOptionNum(name);
+        int optNum = findOptionNum(optName);
         int optSetNum = findOptionSetNum(optSetName);
         opset[optSetNum].setOptionCost(newCost, optNum);
     }
@@ -159,7 +194,8 @@ public class Automobile implements java.io.Serializable {
     /*+++++++++++++++++++++Print Methods+++++++++++++++++++++*/
     //Print Entire Database
     public void print(){
-        System.out.println("Name of Vehicle: " + this.name);
+        System.out.println("Make of Vehicle: " + this.make);
+        System.out.println("Model of Vehicle: " + this.model);
         System.out.println("Base Price of Vehicle: $" + this.basePrice);
         System.out.println("Your " + this.name + " has choices from these " + opset.length + " sets of options:");
         System.out.println("---------------------------------------------------");
@@ -190,5 +226,26 @@ public class Automobile implements java.io.Serializable {
     public void printOptions(){
         for(int i = 0; i < opset.length; i++)
             opset[i].printProperties();
+    }
+
+    //Print Users Choices (Added for Lab 3)
+    public void printChosenOptions(){
+        int size = getOptNameList1().size();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("Our Customer Has Chosen These Options:");
+        System.out.println("----------------------------------------------------");
+
+        for(int i = 0; i < size; i++){
+            System.out.println("Option Category: " + getOptNameList().get(i));
+            System.out.println();
+            Option opt = (Option) getOptNameList1().get(i);
+            System.out.format("%-32s %6s", "Chosen Option: ", "Cost: ");
+            System.out.println();
+            System.out.format("%-32s $%7.2f", opt.getName(), opt.getCost());
+            System.out.println();
+            System.out.println("----------------------------------------------------");
+        }
     }
 }
